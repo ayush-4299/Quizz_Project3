@@ -1,0 +1,58 @@
+{% extends "base.html" %}
+{% load static %}
+{% block title %}{{ quiz.title }}{% endblock %}
+{% block body_class %}game{% endblock %}
+{% block nav %}{% endblock %}
+{% block content %}
+{% csrf_token %}
+<div id="game"
+     data-questions-url="{% url 'api_questions' quiz.slug %}"
+     data-check-url="{% url 'api_check' quiz.slug %}"
+     data-submit-url="{% url 'api_submit' quiz.slug %}"
+     data-login-url="{% url 'account_login' %}">
+  <header class="g-top">
+    <a class="g-exit" href="{% url 'quiz_detail' quiz.slug %}">Exit</a>
+    <div class="g-progress">
+      <span id="g-count">1 / {{ total }}</span>
+      <div class="g-bar"><i id="g-bar"></i></div>
+    </div>
+    <span id="g-streak" class="g-streak" title="Correct answers in a row">Streak 0</span>
+  </header>
+  <div class="g-timer" aria-hidden="true"><i id="g-timer"></i></div>
+
+  <main class="g-stage">
+    <section class="q-card" aria-live="polite">
+      <p class="q-meta" id="q-meta">Loading</p>
+      <h1 id="q-text">Loading questions</h1>
+      <pre class="q-code" id="q-code" hidden><code></code></pre>
+    </section>
+    <div class="opts" id="opts"></div>
+    <div class="feedback" id="feedback" hidden role="status">
+      <strong id="fb-title"></strong>
+      <p id="fb-text"></p>
+    </div>
+  </main>
+
+  <footer class="g-nav">
+    <button class="btn btn-white" id="btn-prev" type="button">Back</button>
+    <nav id="q-map" class="q-map" aria-label="Question navigator"></nav>
+    <button class="btn btn-accent" id="btn-next" type="button">Skip</button>
+  </footer>
+</div>
+
+<dialog id="finish-dialog" class="dialog">
+  <form method="dialog">
+    <h2>Submit your quiz?</h2>
+    <p id="finish-msg"></p>
+    <div class="dialog-actions">
+      <button class="btn btn-ghost" value="cancel">Keep playing</button>
+      <button class="btn btn-primary" value="submit">Submit now</button>
+    </div>
+  </form>
+</dialog>
+
+<div id="g-status" class="status" hidden>
+  <div class="status-box"><p id="g-status-text"></p><button class="btn btn-primary" id="g-retry" hidden type="button">Try again</button></div>
+</div>
+{% endblock %}
+{% block scripts %}<script src="{% static 'js/play.js' %}"></script>{% endblock %}

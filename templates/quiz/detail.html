@@ -1,0 +1,35 @@
+{% extends "base.html" %}
+{% block title %}{{ quiz.title }}{% endblock %}
+{% block content %}
+<main class="page detail">
+  <a class="back" href="{% url 'home' %}">All quizzes</a>
+  <div class="detail-grid">
+    <section class="panel theme-{{ quiz.theme }}">
+      <div class="detail-cover"><span aria-hidden="true">{{ quiz.emoji }}</span></div>
+      <h1>{{ quiz.title }}</h1>
+      <p class="lead">{{ quiz.description }}</p>
+      <div class="facts">
+        <div><strong>{{ total }}</strong><span>questions</span></div>
+        <div><strong>{{ quiz.seconds_per_question }}s</strong><span>per question</span></div>
+        <div><strong>{{ quiz.get_difficulty_display }}</strong><span>level</span></div>
+      </div>
+      <a class="btn btn-primary btn-lg" href="{% url 'play' quiz.slug %}">{% if my_best %}Play again{% else %}Start quiz{% endif %}</a>
+      {% if not user.is_authenticated %}<p class="muted small">You will be asked to log in so your score is saved.</p>{% endif %}
+      {% if my_best %}<p class="muted small">Your best: {{ my_best.score }}/{{ my_best.total }} ({{ my_best.percentage }}%)</p>{% endif %}
+    </section>
+
+    <aside class="panel">
+      <h2>Leaderboard</h2>
+      {% if leaderboard %}
+      <ol class="board">
+        {% for r in leaderboard %}
+        <li><span class="rank">{{ forloop.counter }}</span><span class="who">{{ r.user.username }}</span><span class="score">{{ r.score }}/{{ r.total }}</span><span class="time muted">{{ r.time_taken }}s</span></li>
+        {% endfor %}
+      </ol>
+      {% else %}
+      <p class="muted">No attempts yet. Be the first on the board.</p>
+      {% endif %}
+    </aside>
+  </div>
+</main>
+{% endblock %}
