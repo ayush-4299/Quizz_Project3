@@ -10,9 +10,16 @@ def env(name, default=""):
 
 SECRET_KEY = env("DJANGO_SECRET_KEY", "dev-only-change-me")
 DEBUG = env("DJANGO_DEBUG", "1") == "1"
-ALLOWED_HOSTS = [h for h in env("DJANGO_ALLOWED_HOSTS", "localhost,127.0.0.1,testserver").split(",") if h]
-CSRF_TRUSTED_ORIGINS = [o for o in env("DJANGO_CSRF_TRUSTED_ORIGINS").split(",") if o]
-
+ALLOWED_HOSTS = [
+    "quizz-project3.vercel.app",
+    "quizz-project3-32lvzlav9-ayush-4299s-projects.vercel.app",
+    "localhost",
+    "127.0.0.1",
+]
+CSRF_TRUSTED_ORIGINS = [
+    "https://quizz-project3.vercel.app",
+    "https://quizz-project3-32lvzlav9-ayush-4299s-projects.vercel.app",
+]
 INSTALLED_APPS = [
     "django.contrib.admin",
     "django.contrib.auth",
