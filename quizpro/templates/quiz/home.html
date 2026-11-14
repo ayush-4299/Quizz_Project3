@@ -1,0 +1,43 @@
+{% extends "base.html" %}
+{% block content %}
+<section class="hero">
+  <div class="hero-inner">
+    <h1>Pick a quiz. Get your score instantly.</h1>
+    <p>Timed technical practice in Python, JavaScript, SQL, algorithms and Django.</p>
+    <form class="search" method="get" action="{% url 'home' %}" role="search">
+      <input type="search" name="q" value="{{ q }}" placeholder="Search quizzes" aria-label="Search quizzes">
+      {% if active_cat %}<input type="hidden" name="c" value="{{ active_cat }}">{% endif %}
+      <button class="btn btn-primary">Search</button>
+    </form>
+  </div>
+</section>
+
+<main class="page">
+  <div class="chips" aria-label="Categories">
+    <a class="chip {% if not active_cat %}on{% endif %}" href="{% url 'home' %}{% if q %}?q={{ q|urlencode }}{% endif %}">All</a>
+    {% for c in categories %}
+      <a class="chip {% if active_cat == c.slug %}on{% endif %}" href="?c={{ c.slug }}{% if q %}&q={{ q|urlencode }}{% endif %}">{{ c.name }}</a>
+    {% endfor %}
+  </div>
+
+  {% if quizzes %}
+  <div class="grid">
+    {% for quiz in quizzes %}
+    <a class="card theme-{{ quiz.theme }}" href="{% url 'quiz_detail' quiz.slug %}">
+      <div class="card-cover"><span class="card-emoji" aria-hidden="true">{{ quiz.emoji }}</span><span class="pill">{{ quiz.num_questions }} questions</span></div>
+      <div class="card-body">
+        <h3>{{ quiz.title }}</h3>
+        <p class="muted">{{ quiz.description|truncatechars:90 }}</p>
+        <div class="tags"><span class="tag">{{ quiz.category.name }}</span><span class="tag tag-{{ quiz.difficulty }}">{{ quiz.get_difficulty_display }}</span></div>
+      </div>
+    </a>
+    {% endfor %}
+  </div>
+  {% else %}
+  <div class="empty">
+    <h2>No quizzes match your search</h2>
+    <p>Try a different word, or <a href="{% url 'home' %}">see all quizzes</a>.</p>
+  </div>
+  {% endif %}
+</main>
+{% endblock %}

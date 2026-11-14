@@ -1,0 +1,26 @@
+{% extends "base.html" %}
+{% block title %}My results{% endblock %}
+{% block content %}
+<main class="page">
+  <h1 class="page-title">My results</h1>
+  <div class="facts stat-strip">
+    <div><strong>{{ stats.attempts }}</strong><span>attempts</span></div>
+    <div><strong>{{ stats.average }}%</strong><span>average score</span></div>
+    <div><strong>{{ stats.best }}%</strong><span>best score</span></div>
+  </div>
+  {% if results %}
+  <ul class="history">
+    {% for r in results %}
+    <li><a href="{% url 'result' r.id %}">
+      <span class="h-title">{{ r.quiz.title }}</span>
+      <span class="h-date muted">{{ r.created_at|date:"j M Y, H:i" }}</span>
+      <span class="h-score">{{ r.score }}/{{ r.total }}</span>
+      <span class="h-pct pct-{% if r.percentage >= 70 %}high{% elif r.percentage >= 40 %}mid{% else %}low{% endif %}">{{ r.percentage }}%</span>
+    </a></li>
+    {% endfor %}
+  </ul>
+  {% else %}
+  <div class="empty"><h2>No attempts yet</h2><p>Finish a quiz and it will show up here. <a href="{% url 'home' %}">Browse quizzes</a></p></div>
+  {% endif %}
+</main>
+{% endblock %}
