@@ -1,0 +1,40 @@
+{% extends "base.html" %}
+{% block title %}Results: {{ result.quiz.title }}{% endblock %}
+{% block content %}
+<main class="page result">
+  <section class="panel score-panel">
+    <div class="ring" style="--pct: {{ result.percentage }}">
+      <svg viewBox="0 0 120 120" aria-hidden="true">
+        <circle class="ring-bg" cx="60" cy="60" r="54"/>
+        <circle class="ring-fg" cx="60" cy="60" r="54"/>
+      </svg>
+      <div class="ring-text"><strong>{{ result.percentage }}%</strong><span>{{ result.score }} of {{ result.total }}</span></div>
+    </div>
+    <div>
+      <h1>{{ result.headline }}</h1>
+      <p class="lead">{{ result.quiz.title }}, finished in {{ result.time_taken }} seconds.</p>
+      <div class="actions">
+        <a class="btn btn-primary" href="{% url 'play' result.quiz.slug %}">Play again</a>
+        <a class="btn btn-ghost" href="{% url 'quiz_detail' result.quiz.slug %}">Leaderboard</a>
+        <a class="btn btn-ghost" href="{% url 'home' %}">More quizzes</a>
+      </div>
+    </div>
+  </section>
+
+  <h2 class="section-title">Review your answers</h2>
+  <ul class="review">
+    {% for row in rows %}
+    <li class="review-item {% if row.is_correct %}ok{% else %}bad{% endif %}">
+      <div class="review-head">
+        <span class="badge">{% if row.is_correct %}Correct{% elif row.chosen %}Incorrect{% else %}Unanswered{% endif %}</span>
+        <h3>{{ forloop.counter }}. {{ row.question.text }}</h3>
+      </div>
+      {% if row.question.code %}<pre class="q-code"><code>{{ row.question.code }}</code></pre>{% endif %}
+      {% if row.chosen and not row.is_correct %}<p><span class="muted">Your answer:</span> {{ row.chosen.text }}</p>{% endif %}
+      <p><span class="muted">Correct answer:</span> <strong>{{ row.correct.text }}</strong></p>
+      {% if row.question.explanation %}<p class="why">{{ row.question.explanation }}</p>{% endif %}
+    </li>
+    {% endfor %}
+  </ul>
+</main>
+{% endblock %}
