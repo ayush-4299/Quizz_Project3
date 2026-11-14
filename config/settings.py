@@ -12,7 +12,7 @@ SECRET_KEY = env("DJANGO_SECRET_KEY", "dev-only-change-me")
 DEBUG = env("DJANGO_DEBUG", "1") == "1"
 ALLOWED_HOSTS = [
     "quizz-project3.vercel.app",
-    "quizz-project3-32lvzlav9-ayush-4299s-projects.vercel.app",
+    ".vercel.app",
     "localhost",
     "127.0.0.1",
 ]
